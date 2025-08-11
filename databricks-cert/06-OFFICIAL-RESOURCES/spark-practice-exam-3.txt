@@ -1,0 +1,1332 @@
+Pregunta 1
+Correcto
+Which of the following 3 DataFrame operations are classified as an action? Choose 3 answers:
+Tu selección es correcta
+foreach()
+
+limit()
+
+printSchema()
+
+cache()
+
+Tu selección es correcta
+show()
+
+Tu selección es correcta
+first()
+
+Explicación general
+see https://spark.apache.org/docs/latest/rdd-programming-guide.html#actions
+Temática
+Transformation and Action
+Pregunta 2
+Correcto
+Which of the followings is NOT a useful use cases of spark ?
+Tu respuesta es correcta
+Processing in parallel small data sets distributed across a cluster
+Analyzing graph data sets and social networks
+Building, training, and evaluating machine learning models using MLlib
+Performing ad hoc or interactive queries to explore and visualize data sets
+Explicación general
+It is preferable to process in parallel big data sets distributed across a cluster with spark
+
+Temática
+Conceptual understanding
+Pregunta 3
+Correcto
+When joining two dataframes, if there is a need to evaluate the keys in both of the DataFrames or tables and include all rows from the right DataFrame as well as any rows in the left DataFrame that have a match in the righ DataFrame also If there is no equivalent row in the left DataFrame, we want to instert null: which join type we should select ? df1.join(person, joinExpression, joinType)
+
+joinType = “rightOuter”
+
+Tu respuesta es correcta
+joinType = “right_outer”
+
+joinType = “rightAnti”
+
+joinType = “rightSemi”
+
+Explicación general
+Correct answer is joinType = "right_outer". For example df1.join(person, joinExpression, “right_outer”).show()
+Temática
+Data frame Joins
+Pregunta 4
+Correcto
+Choose the correct code block to unpersist a table named ‘table’.
+
+spark.uncacheTable(“table”)
+spark.uncacheTable(table)
+Tu respuesta es correcta
+spark.catalog.uncacheTable(“table”)
+spark.catalog.uncacheTable(table)
+Explicación general
+Correct usage is spark.catalog.uncacheTable(“tableName”)
+
+
+
+To remove the data from the cache, just call:
+
+spark.sql("uncache table table_name")
+ 
+or 
+ 
+spark.catalog.uncacheTable(“table_name”) 
+
+
+To unpersist dataframe use:
+
+spark.sql("df.unpersist()")
+
+
+
+
+Another thing to remember is when using DataFrame.persist() data on disk is always serialized.
+
+
+
+
+
+Temática
+Cache and Persist
+Pregunta 5
+Correcto
+Choose valid execution modes in the following responses.
+Tu selección es correcta
+Client
+Standalone
+Tu selección es correcta
+Local
+Tu selección es correcta
+Cluster
+Explicación general
+An execution mode gives you the power to determine where the aforementioned resources are physically located when you go to run your application. You have three modes to choose from: Cluster mode, client mode and local mode. Standalone is one of the cluster manager types.
+Temática
+Conceptual understanding
+Pregunta 6
+Correcto
+You have a need to sort a dataframe df which has some null values on column a. You want the null values to appear last, and then the rest of the rows should be ordered ascending based on the column a. Choose the right code block to achieve your goal.
+
+df.orderBy(asc("a"))
+
+df.sort(asc_nulls_last(a))
+
+df.orderBy(asc_nulls_last(a))
+
+It is not possible to sort, when there are null values on the specified column.
+Tu respuesta es correcta
+df.orderBy(df.a.asc_nulls_last())
+
+Explicación general
+Correct syntax is;
+
+
+
+df.orderBy(df.a.asc_nulls_last())
+
+df.sort(df.a.asc_nulls_last())
+
+
+
+or
+
+df.orderBy(asc_nulls_last("a"))
+
+df.sort(asc_nulls_last("a"))
+
+Temática
+Spark DataFrame API Applications
+Pregunta 7
+Correcto
+Given the code block down below, a database test containing nulls, identify the error.
+
+
+
+def my_udf(s):
+  If s is not None:
+    return len(s)
+  else:
+    return 0
+ 
+spark.udf.register("strlen", my_udf) 
+spark.sql("select s from test where s is not null and strlen(s) > 1") 
+Tu respuesta es correcta
+There are no problems in this query.
+We need to create the function first and then pass it to udf.register
+We need to use function ‘query’ instead of ‘sql’ to query table test.
+This WHERE clause does not guarantee the strlen UDF to be invoked after filtering out nulls. So we will have null pointer
+Explicación general
+Spark SQL (including SQL and the DataFrame and Dataset APIs) does not guarantee the order of evaluation of subexpressions. In particular, the inputs of an operator or function are not necessarily evaluated left-to-right or in any other fixed order. For example, logical AND and OR expressions do not have left-to-right “short-circuiting” semantics. To perform proper null checking, we recommend that you do either of the following: Make the UDF itself null-aware and do null checking inside the UDF itself Use IF or CASE WHEN expressions to do the null check and invoke the UDF in a conditional branch
+Temática
+Register UDF
+Pregunta 8
+Correcto
+If spark is running in cluster mode, which of the following statements about nodes is correct ?
+There is always more than one node.
+There are less executors than total number of nodes
+Tu respuesta es correcta
+The spark driver runs in worker node inside the cluster.
+
+Each executor is running JVM inside of a cluster manager node.
+There is one single worker node that contains the Spark driver and all the executors.
+
+Explicación general
+In cluster mode, a user submits a pre-compiled JAR, Python script, or R script to a cluster manager. The cluster manager then launches the driver process on a worker node inside the cluster, in addition to the executor processes.
+Temática
+Deployment Mode: Cluster/Client
+Pregunta 9
+Incorrecto
+Which of the following statement is NOT true for broadcast variables ?
+
+The canonical use case is to pass around a small large table that does fit in memory on the executors.
+Selección correcta
+You can define your own custom broadcast class by extending org.apache.spark.util.BroadcastV2 in Java or Scala or pyspark.AccumulatorParams in Python.
+Broadcast variables are shared, immutable variables that are cached on every machine in the cluster instead of serialized with every single task.
+
+Selección correcta
+It is a way of updating a value inside of a variety of transformations and propagating that value to the driver node in an efficient and fault-tolerant way.
+Tu selección es correcta
+It provides a mutable variable that a Spark cluster can safely update on a per-row basis.
+
+Explicación general
+Broadcast variables are a way you can share an immutable value efficiently around the cluster without encapsulating that variable in a function closure. The normal way to use a variable in your driver node inside your tasks is to simply reference it in your function closures (e.g., in a map operation), but this can be inefficient, especially for large variables such as a lookup table or a machine learning model. The reason for this is that when you use a variable in a closure, it must be deserialized on the worker nodes many times (one per task)
+Temática
+Broadcast/accumulator
+Pregunta 10
+Correcto
+Which of the following transformation is not evaluated lazily ?
+Tu respuesta es correcta
+None of the responses, all transformations are lazily evaluated.
+select()
+
+sample()
+
+filter()
+
+repartition()
+
+Explicación general
+All transformations are lazily evaluated in spark.
+Temática
+Lazy evaluation
+Pregunta 11
+Correcto
+What does the following property achieves in spark when enabled ?
+
+spark.sql.adaptive.skewJoin.enabled 
+
+The goal of this property is to allow you to read only as much data as you need.
+Tu respuesta es correcta
+Spark dynamically handles skew in sort-merge join by splitting (and replicating if needed) skewed partitions with this property enabled.
+It allows you to dynamically convert physical plans to RDDs
+It allows you to dynamically select physical plans based on cost.
+Explicación general
+see https://spark.apache.org/docs/latest/sql-performance-tuning.html
+Temática
+Adaptive Query Execution
+Pregunta 12
+Correcto
+Which of the following describes the relationship between cluster managers and worker nodes?
+A worker node is a Java Virtual Machine (JVM) running on an cluster manager.
+There are always more cluster manager nodes than worker nodes.
+Tu respuesta es correcta
+Cluster manager creates worker nodes and allocates resource to it.
+A cluster manager is a Java Virtual Machine (JVM) running on a worker node.
+There are always the same number of cluster managers and worker nodes.
+Explicación general
+An executor is a Java Virtual Machine (JVM) running on a worker node. See the componenets here: https://spark.apache.org/docs/latest/cluster-overview.html
+Temática
+Conceptual understanding
+Pregunta 13
+Correcto
+The code block shown below should return a new DataFrame with a new column named “casted” who’s value is the string equivalent of column “a” which is a integer column, also this dataframe should contain all the previously existing columns from DataFrame df. Choose the response that correctly fills in the numbered blanks within the code block to complete this task. 
+
+Code block: 
+
+df._1_(_2_, _3_)
+
+1. withColumnRenamed
+
+2. casted
+
+3. col(“a”).cast(“String”)
+
+Tu respuesta es correcta
+1. withColumn
+
+2. “casted”
+
+3. col(“a”).cast(“String”)
+
+1. withColumn
+
+2. casted
+
+3. col(a).cast(String)
+
+1. withColumn
+
+2. “casted”
+
+3. cast(col(“a”)
+
+1. withColumnRenamed
+
+2. “casted”
+
+3. col(“a”).cast(“String”)
+
+1. withColumn
+
+2. “casted”
+
+3. cast(a)
+
+Explicación general
+Read the questions and responses carefully ! You will have many questions like this one, try to visualise it and write it down if it helps. There is always quotes in the column name and you need to you .cast to cast a column
+Temática
+Spark DataFrame API Applications
+Pregunta 14
+Correcto
+Let’s suppose that we have a dataframe df with a column ‘today’ which has a format ‘YYYY-MM-DD’. You want to add a new column to this dataframe ‘week_later’ and you want it’s value to be one week after to column ‘today’. Select the correct code block.
+
+df.withColumn(week_later, date_add(col("today"), 7))
+
+df.withColumn("week_later", week_add(col("today"), 7))
+
+Tu respuesta es correcta
+df.withColumn("week_later", date_add(col("today"), 7))
+
+df.withColumn("week_later", col("today") + 7))
+
+df.withColumn( date_add(col("today"), 7), “week_later”)
+
+Explicación general
+Date_sub and date_add are some functions that exist in the following packages org.apache.spark.sql.functions.*
+Temática
+Spark DataFrame API Applications
+Pregunta 15
+Correcto
+The code block shown below should return a new DataFrame with 25 percent of random records from dataframe df with replacement. Choose the response that correctly fills in the numbered blanks within the code block to complete this task. 
+
+
+
+Code block: 
+
+df._1_(_2_, _3_, _4_)
+
+1. sample
+
+2. False
+
+3. 0.25
+
+4. 5
+
+Tu respuesta es correcta
+1. sample
+
+2. True
+
+3. 0.25
+
+4. 5
+
+1. sample
+
+2. withReplacement
+
+3. 0.25
+
+4. 5
+
+1. sample
+
+2. True
+
+3. 25
+
+4. 5
+
+1. random
+
+2. True
+
+3. 0.25
+
+4. 5
+
+1. sample
+
+2. True
+
+3. 0.5
+
+4. 25
+
+Temática
+Spark DataFrame API Applications
+Pregunta 16
+Correcto
+The code block down below intends to join df1 with df2 with inner join but it contains an error. Identify the error.  d1.join(d2, d1.col(id) == df2.col(id), inner)
+
+There should be two === instead of ==. So the correct query is
+
+d1.join(d2, d1.col(“id”) === df2.col(“id“), inner)
+The order is not correct. It should be like the following
+
+df1.join(d2, “inner”, d1.col(“id”) === df2.col(“id”))
+
+We cannot do inner join in spark 3.0, but it is in the roadmap.
+Tu respuesta es correcta
+Quotes are missing. The correct query should be
+
+d1.join(d2, d1.col(“id”) == df2.col(“id“), “inner”)
+
+Explicación general
+df1.join(df2, joinExpression, joinType)
+Temática
+Data frame Joins
+Pregunta 17
+Correcto
+Which property is used to to allocates jobs to different resource pools to achieve resources scheduling within an application ?
+
+Dynamic allocation
+Tu respuesta es correcta
+Fair Scheduler
+There is no need to set a property since spark is by default capable of resizing
+Explicación general
+If you would like to run multiple Spark Applications on the same cluster, Spark provides a mechanism to dynamically adjust the resources your application occupies based on the workload. This means that your application can give resources back to the cluster if they are no longer used, and request them again later when there is demand. This feature is particularly useful if multiple applications share resources in your Spark cluster. This feature is disabled by default and available on all coarse-grained cluster managers; that is, standalone mode, YARN mode, and Mesos coarse-grained mode. There are two requirements for using this feature. First, your application must set spark.dynamicAllocation.enabled to true. Second, you must set up an external shuffle service on each worker node in the same cluster and set spark.shuffle.service.enabled to true in your application. The purpose of the external shuffle service is to allow executors to be removed without deleting shuffle files written by them. The Spark Fair Scheduler specifies resource pools and allocates jobs to different resource pools to achieve resource scheduling within an application. In this way, the computing resources are effectively used and the runtime of jobs is balanced, ensuring that the subsequently-submitted jobs are not affected by over-loaded jobs.
+
+Temática
+Conceptual understanding
+Pregunta 18
+Correcto
+Given an instance of SparkSession named spark, and the following DataFrame named df: 
+
+simpleData = [("James","Sales","NY",90000,34,10000),
+    ("Michael","Sales","NY",86000,56,20000),
+    ("Robert","Sales","CA",81000,30,23000),
+    ("Maria","Finance","CA",90000,24,23000),
+    ("Raman","Finance","CA",99000,40,24000),
+    ("Scott","Finance","NY",83000,36,19000),
+    ("Jen","Finance","NY",79000,53,15000),
+    ("Jeff","Marketing","CA",80000,25,18000),
+    ("Kumar","Marketing","NY",91000,50,21000)
+  ]
+schema = ["employee_name","department","state","salary","age","bonus"]
+df = spark.createDataFrame(data=simpleData, schema = schema)
+Choose the right code block which will produce the following result:
+
++----------+-----------+ 
+|department|sum(salary)
+ 
++----------+-----------+ 
+Sales     |257000     
+Finance   |351000     
+Marketing |171000     
+ 
++----------+-----------+
+df.reduce("department").sum("salary").show(truncate=False)
+
+df.groupBy("department").agg("salary").show(truncate=False)
+
+df.groupBy(department).sum(salary).show(truncate=False)
+
+Tu respuesta es correcta
+df.groupBy("department").sum("salary").show(truncate=False)
+
+df.groupBy("department").sumAll("salary").show(truncate=False)
+
+Temática
+Spark DataFrame API Applications
+Pregunta 19
+Correcto
+The code block shown below intends to return a new DataFrame with column “old” renamed to “new” but it contains an error. Identify the error. 
+
+df.withColumnRenamed(old, new)
+
+You need to reverse parameters and add quotes. So correct code block is df.withColumnRenamed(“new”, “old”)
+
+WithColumnRenamed is not a valid fonction , we need to use df.withColumnRenamed(“new”, “old”)
+
+We need to add ‘col’ to specifiy that it’s a column. df.withColumnRenamed(col(“new”), col(“old”))
+
+Tu respuesta es correcta
+You need to add quotes; correct usage is
+
+df.withColumnRenamed(“old”, “new”)
+
+Explicación general
+You need to be really familiar with the syntax of withColumn, withColumnRenamed for the exam. Learn them very well.
+Temática
+Spark DataFrame API Applications
+Pregunta 20
+Correcto
+The code block shown below contains an error. Identify the error.
+
+ def squared (s):
+   return s*s
+ 
+spark.udf.register("square", squared) spark.range(1, 20).createOrReplaceTempView("test") spark.sql(“select id, square(id) as id_squared from temp_test”)
+There is no column id created in the database.
+Tu respuesta es correcta
+We are not querying the right view. Correct code block should be:
+
+spark.sql(“select id, square(id) as id_squared from test”)
+
+We are not refering to right database. Proper command should be:
+
+spark.sql(“select id, squared(id) as id_squared from temp_test”)
+
+There is no error in the code.
+We need to add quotes when using udf in sql. Proper usage should be:
+
+spark.sql(“select id, “squared(id)” as id_squared from test”)
+
+Explicación general
+You need to query the right table. Read carefully the questions !
+Temática
+Register UDF
+Pregunta 21
+Correcto
+Which of the following describes a stage best ?
+A process launched for an application on a worker node, that runs tasks and keeps data in memory or disk storage across them.
+User program built on Spark. Consists of a driver program and executors on the cluster.
+An external service for acquiring resources on the cluster (e.g. standalone manager, Mesos, YARN)
+A unit of work that will be sent to one executor.
+Tu respuesta es correcta
+A physical unit of execution which is a sequence of tasks that can all be run together in parallel without a shuffle.
+Explicación general
+https://spark.apache.org/docs/latest/cluster-overview.html
+Temática
+Conceptual understanding
+Pregunta 22
+Correcto
+Which of the following is true for an executor ?
+Tu respuesta es correcta
+There could be multiple exectuors in a single worker node.
+Executors are the most granular level of execution in the Spark execution hierarchy.
+Executors nodes always have a one-to-one relationship with workers.
+Worker nodes are synonymous with executors.
+Explicación general
+A worker node can be holding multiple executors (processes) if it has sufficient CPU, Memory and Storage. https://spark.apache.org/docs/latest/cluster-overview.html
+Temática
+Conceptual understanding
+Pregunta 23
+Correcto
+Which of the following code blocks returns a DataFrame with two new columns ‘a’ and ‘b’ from the existing column ‘aSquared’ where the values of ‘a’ and ‘b’ is half of the column ‘aSquared’ ?
+
+Tu respuesta es correcta
+df.withColumn(“a”, col(“aSquared”)/2).withColumn(“b”, col(“aSquared”)/2)
+
+df.withColumn(“aSquared” /2 , col(a) ).withColumn(“aSquared” /2 , col(b) )
+
+df.withColumn(aSquared/2 , col(a) ) .withColumn(aSquared /2 , col(b) )
+
+df.withColumn(aSquared, col(a) * col(a))
+
+df.withColumn(“aSquared” /2 , col(“a”) ).withColumn(“aSquared” /2 , col(“b”) )
+
+Explicación general
+Familiarize yourself with the syntax of withColumn and withColumnRenamed.
+Temática
+Spark DataFrame API Applications
+Pregunta 24
+Incorrecto
+Which of the followings are true for driver ?
+Tu selección es correcta
+Is responsible for maintaining information about the Spark Application
+Selección correcta
+Responsible for assigning work that will be completed in parallel.
+Tu selección es correcta
+Runs your main() function
+Controls physical machines and allocates resources to Spark Applications
+Tu selección es incorrecta
+Executing code assigned to it
+Explicación general
+The driver is the machine in which the application runs. It is responsible for three main things: 1) Maintaining information about the Spark Application, 2) Responding to the user’s program, 3) Analyzing, distributing, and scheduling work across the executors.
+Temática
+Conceptual understanding
+Pregunta 25
+Correcto
+What is the first thing to try if garbage collection is a problem ?
+Tu respuesta es correcta
+First thing to try if garbage collection is a problem is to use serialized caching
+
+Persist objects in deserialized form
+Descrease java heap space size
+Explicación general
+JVM garbage collection can be a problem when you have large “churn” in terms of the RDDs stored by your program. When Java needs to evict old objects to make room for new ones, it will need to trace through all your Java objects and find the unused ones. The main point to remember here is that the cost of garbage collection is proportional to the number of Java objects, so using data structures with fewer objects (e.g. an array of Ints instead of a LinkedList) greatly lowers this cost. https://spark.apache.org/docs/latest/tuning.html#garbage-collection-tuning
+Temática
+Garbage Collection
+Pregunta 26
+Incorrecto
+Which of the following is correct for the cluster manager ?
+
+All of the answers are correct.
+It is interchangeable with job.
+Respuesta correcta
+Keeps track of the resources available.
+
+Executes code assigned to it.
+
+Tu respuesta es incorrecta
+Reports the state of the computation back to the driver.
+
+Explicación general
+Review well this concept for the exam. https://spark.apache.org/docs/latest/cluster-overview.html
+Temática
+Conceptual understanding
+Pregunta 27
+Correcto
+Which of the following code property is used for enabling adaptive query ?
+spark.adaptive.sql
+spark.sql.optimize.adaptive
+spark.sql.adaptive
+Tu respuesta es correcta
+spark.sql.adaptive.enabled
+spark.adaptive
+Explicación general
+see the following blog for more information: https://databricks.com/blog/2020/05/29/adaptive-query-execution-speeding-up-spark-sql-at-runtime.html
+Temática
+Adaptive Query Execution
+Pregunta 28
+Correcto
+Given the following dataframe
+
+
+
+df = spark.createDataFrame([  ['John','NYC'],  ['Kevin','Chicago'],  ['Ram','Delhi'],  ['Sanjay','Sdyney'],  ['Ali','Istanbul'],  ['Zakaria','Paris'],  ['Alice','Chicago'],  ['Ann','Miami'],  ['Hajar','Casablanca'],  ['Cassandra','Marseille']],('name','city'))  
+df = df.repartition(8)
+We execute the following code block
+
+
+
+df.write.mode("overwrite").option("compression", "snappy").save("path") 
+
+
+
+Choose the correct number of files after a successful write operation.
+
+Tu respuesta es correcta
+8
+4
+1
+Explicación general
+We control the parallelism of files that we write by controlling the partitions prior to writing and therefore the number of partitions before writing equals to number of files created after the write operation. If you don't specify number of partitions normally, spark tries to set the number of partitions automatically based on your cluster but here we specified that we want to have 8 partitions after we created the dataframe, so we will have 8 files in the directory.
+
+Temática
+Read and Write parquet/text/JSON file
+Pregunta 29
+Correcto
+Your manager gave you a task to remove sensitive data. Choose the correct code block down below to remove name and city from the dataframe.  
+
+df = spark.createDataFrame([  ['Josh','Virginia',25,'M'],  ['Adam','Paris',34,'M']],('name','city','age','gender'))
+
+df.drop(name,city)
+
+df.drop("Josh","Adam")
+
+df.remove("name","city")
+
+df.remove(name,city)
+
+Tu respuesta es correcta
+df.drop("name","city")
+
+Explicación general
+Correct useage of drop is the following:
+Temática
+Spark DataFrame API Applications
+Pregunta 30
+Correcto
+Select the code block which counts distinct number of “quantity” for each “invoiceNo” in the dataframe df.
+
+df.groupBy(InvoiceNo).agg( expr("count(Quantity)"))
+
+df.reduceBy("InvoiceNo").agg( expr("count(Quantity)"))
+
+Tu respuesta es correcta
+df.groupBy("InvoiceNo").agg( expr("countDisctinct(Quantity)"))
+
+df.groupBy(InvoiceNo).agg( expr(count(Quantity)))
+
+df.groupBy("InvoiceNo").agg( expr(count(Quantity)))
+
+Temática
+Spark DataFrame API Applications
+Pregunta 31
+Correcto
+Choose the correct code block to broadcast dfA and join it with dfB ?
+
+dfA.join(broadcast(“dfB”), dfA.id == dfB.id)
+
+dfA.join(broadcast(dfB), dfA.id == dfB.id)
+
+dfB.join(broadcast(“dfA”), dfA.id == dfB.id)
+
+Tu respuesta es correcta
+dfB.join(broadcast(dfA), dfA.id == dfB.id)
+
+Explicación general
+There are other syntax’s also but to broadcast dfA but for this example you need to wrap it in keyword broadcast. Also the order of the join is important as you can see.
+Temática
+Data frame Joins
+Pregunta 32
+Correcto
+The following statement will create a managed table
+
+dataframe.write.saveAsTable("unmanaged_my_table")
+
+Tu respuesta es correcta
+TRUE
+FALSE
+Explicación general
+One important note is the concept of managed versus unmanaged tables. Tables store two important pieces of information. The data within the tables as well as the data about the tables; that is, the metadata. You can have Spark manage the metadata for a set of files as well as for the data. When you define a table from files on disk, you are defining an unmanaged table. When you use saveAsTable on a DataFrame, you are creating a managed table for which Spark will track of all of the relevant information.
+
+Temática
+Read and Write parquet/text/JSON file
+Pregunta 33
+Incorrecto
+Choose the right code block in order to change add a new column to the following schema.
+
+schema = StructType([StructField("name",StringType(),True) ])
+
+schema.append(StringType(), "new_column")
+
+schema.add(StringType(), "new_column")
+
+Respuesta correcta
+schema.add("new_column",StringType(),True)
+
+Tu respuesta es incorrecta
+schema.append("new_column",StringType(),True)
+
+Explicación general
+Correct syntax is schema.add("new_column",StringType(),True).
+Temática
+Spark DataFrame API Applications
+Pregunta 34
+Correcto
+If we want to create a constant string 1 as a new column ‘new_column’ in the dataframe df, which code block we should select ?
+
+Tu respuesta es correcta
+df.withColumn("new_column", lit("1"))
+
+df.withColumn(“new_column”, lit(1))
+
+df.withColumn(new_column, lit(1))
+
+df.withColumnRenamed('new_column', lit(1))
+
+df.withColumn(“new_column”, 1)
+
+Explicación general
+The second argument for DataFrame.withColumn should be a Column so you have to use a literal to add constant value “1”:
+Temática
+Spark DataFrame API Applications
+Pregunta 35
+Correcto
+Consider the following DataFrame: 
+
+simpleData = (("James", "Sales", 3000), \
+    ("Michael", "Sales", 4600),  \
+    ("Robert", "Sales", 4100),   \
+    ("Maria", "Finance", 3000),  \
+    ("James", "Sales", 3000),    \
+    ("Scott", "Finance", 3300),  \
+    ("Jen", "Finance", 3900),    \
+    ("Jeff", "Marketing", 3000), \
+    ("Kumar", "Marketing", 2000),\
+    ("Saif", "Sales", 4100) \
+  ) 
+columns= ["employee_name", "department", "salary"]
+df = spark.createDataFrame(data = simpleData, schema = columns)
+
+  Select the code fragment that produces the following result: 
+
+ +-------------+----------+------+----------+
+ |employee_name|department|salary|dense_rank| 
++-------------+----------+------+----------+ |       
+ James|     Sales|  3000|         1| 
+ James|     Sales|  3000|         1|
+ Robert|     Sales|  4100|         2|       
+ Saif|     Sales|  4100|         2|      
+ Michael|     Sales|  4600|         3|         
+ Maria|   Finance|  3000|         1|         
+ Scott|   Finance|  3300|         2|           
+ Jen|   Finance|  3900|         3| 
+ Kumar| Marketing|  2000|         1|        
+ Jeff| Marketing|  3000|         2|
++-------------+----------+------+----------+
+Tu respuesta es correcta
+from pyspark.sql.functions import dense_rank
+
+windowSpec  = Window.partitionBy("department").orderBy("salary")
+
+df.withColumn("dense_rank",dense_rank().over(windowSpec)) .show()
+
+windowSpec  = Window.partitionBy("department").orderBy("salary")  df.withColumn("rank",rank().over(“windowSpec”)) .show() 
+
+windowSpec  = Window.partitionBy("department").orderBy("name")  df.withColumn("rank",rank().over(windowSpec)) .show() 
+
+windowSpec  = Window.partitionBy("department").orderBy("salary")
+
+df.withColumn("rank",rank().over(windowSpec)).show()
+
+from pyspark.sql.functions import dense_rank  windowSpec  = Window.partitionBy("department").orderBy("salary")  df.withColumn("dense_rank",dense_rank().over(“windowSpec”)) .show()
+
+Explicación general
+dense_rank() window function is used to get the result with rank of rows within a window partition without any gaps. This is similar to rank() function difference being rank function leaves gaps in rank when there are ties.
+Temática
+Spark DataFrame API Applications
+Pregunta 36
+Correcto
+Which of the following code blocks reads from a tsv file where values are separated with ‘\t’ ?
+
+spark.read.format("tsv").option("header", "true").option(“inferSchema”, “true”).load(file)
+
+spark.load.option("header", "true").option(“inferSchema”, “true”).read(file)
+
+spark.read.option("header", "true").option(“inferSchema”, “true”).option(“sep”, “true”).toDf(file)
+
+Tu respuesta es correcta
+spark.read.format("csv").option("header", "true").option(“inferSchema”, “true”).option(“sep”, “\t”).load(file)
+
+Explicación general
+With Spark 2.0+ we can use CSV connector to read a tsv file.
+Temática
+Read and Write parquet/text/JSON file
+Pregunta 37
+Correcto
+At which stage Catalyst optimizer generates one or more physical plans ?
+Tu respuesta es correcta
+Physical Planning
+Logical Optimization
+Analysis
+Code Generation
+Explicación general
+First set of optimizations takes place in step logical optimization. See the link for more detail: https://databricks.com/glossary/catalyst-optimizer
+Temática
+Conceptual understanding
+Pregunta 38
+Correcto
+Which of the following statements about Spark accumulator variables is true?
+Accumulators provide a immutable variable that a Spark cluster cannot update on a per-row basis.
+You can define your own custom accumulator class by extending org.apache.spark.util.AccumulatorV1 in Java or Scala or pyspark.AccumulatorParams in Python.
+In transformations, each task’s update can be applied only once if tasks or job stages are re-executed.
+
+For accumulator restarted tasks will update the value in case of a failure.
+Tu respuesta es correcta
+The Spark UI displays named accumulators used by your application.
+
+Explicación general
+You need to name the accumulator in order to see in it in the spark ui For accumulator restarted tasks will not update the value in case of a failure. In transformations, each task’s update can be applied more than once if tasks or job stages are re-executed. Accumulators provide a mutable variable that a Spark cluster can safely update on a per-row basis. You can define your own custom accumulator class by extending org.apache.spark.util.AccumulatorV2 in Java or Scala or pyspark.AccumulatorParam in Python.
+Temática
+Broadcast/accumulator
+Pregunta 39
+Correcto
+We want to drop any rows that how a null value. Choose the correct order in order to achieve this goal.
+
+1. df.
+2. drop.
+3. na()
+4. drop(how=’all’)
+5. dropna(how=’any’)
+1, 2, 3
+1, 4
+Tu respuesta es correcta
+1, 5
+1, 2, 6
+Temática
+Spark DataFrame API Applications
+Pregunta 40
+Correcto
+Which of the following code blocks changes the parquet file content given that there is already a file exist with the name that we want to write ?
+df.format(“parquet”).mode("overwrite").option("compression", "snappy").save("path")
+
+df.write.option("compression", "snappy").save("path")
+
+df.write.format(“parquet”).option("compression", "snappy").path("path")
+
+Tu respuesta es correcta
+df.write.mode("overwrite").option("compression", "snappy").save("path")
+
+Explicación general
+Parquet is the default file format. If you don’t include the format() method, the DataFrame will still be saved as a Parquet file. If we don’t include mode ‘overwrite’ our application will crash since there is already a file exist with the same name.
+Temática
+Read and Write parquet/text/JSON file
+Pregunta 41
+Correcto
+The code block shown below contains an error. The code block is intended to write a text file in the path. What should we add to part 1 in order to fix ?
+
+
+df = spark.createDataFrame([
+ 
+['John','NYC'],
+ 
+['Kevin','Chicago']],('name','city'))
+ 
+(1)
+ 
+df.write.text(“my_file.txt”)
+df.take()
+
+Tu respuesta es correcta
+df.drop("name")
+
+df.repartition(8)
+
+df.coalse(4)
+
+Explicación general
+When you write a text file, you need to be sure to have only one string column; otherwise, the write will fail:
+Temática
+Read and Write parquet/text/JSON file
+Pregunta 42
+Correcto
+You have a need to transform a column named ‘timestamp’ to a date format. Assume that the column ‘timestamp’ is compatible with format date. You have written the code block down below, but it contains an error. Identify and fix it. 
+
+
+
+df.select(to_date(col("timestamp"), "MM-dd-yyyy").show()
+
+to_date() is not a valid operation. Proper function is toDate() df.select(toDate(col("timestamp"), "MM-dd-yyyy").show()
+
+Tu respuesta es correcta
+Format is not correct. You need to change it to: df.select(to_date(col("timestamp"), ‘yyyy-dd-MM’))
+
+to_date() is not a valid operation. Proper function is toDate() and also we need to change the format. df.select(toDate(col("timestamp"), "yyyy-MM-dd").show()
+
+We need to add a format and it should be the first parameter passed to this function. df.select(to_timestamp(‘yyyy-dd-MM’, col("date")))
+
+Explicación general
+Correct function is: to_date and also we need to give a format which is compatible with java timestamp class https://docs.oracle.com/javase/8/docs/api/java/sql/Timestamp.html
+Temática
+Spark DataFrame API Applications
+Pregunta 43
+Incorrecto
+Given the following statements regarding caching: 
+
+
+
+1: The default storage level for a DataFrame is StorageLevel.MEMORY   
+ 
+2: The DataFrame class does have an unpersist() operation   
+ 
+3: The persist() method needs an action to load data from its source to materialize the DataFrame in cache
+
+Which one is NOT TRUE ?
+
+1,3
+Selección correcta
+1
+1,2,3
+2
+
+Tu selección es incorrecta
+1,2
+Explicación general
+Default storage level is MEMORY_AND_DISK
+
+
+
+https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.DataFrame.cache.html#pyspark.sql.DataFrame.cache
+
+
+
+https://spark.apache.org/docs/latest/api/scala/org/apache/spark/sql/Dataset.html
+
+
+
+
+
+
+
+Dataframe has unpersist() function;
+
+https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.DataFrame.unpersist.html#pyspark.sql.DataFrame.unpersist
+
+
+
+
+
+
+
+The persist() method needs an action to load data from its source to materialize the DataFrame in cache (and you should be using all the partitions while doing that action)
+
+Temática
+Cache and Persist
+Pregunta 44
+Correcto
+How make sure that dataframe df has 8 partitions given that it has 4 partitions ?
+
+df.setPartitition(8)
+
+df.coalesce(8)
+
+Tu respuesta es correcta
+df.repartition(8)
+
+df.partition(8)
+
+Explicación general
+correct syntax is;
+
+
+
+df.repartition(8)
+
+
+
+and you cannot increase the number of partitions with
+
+
+
+df.coalesce(8)
+
+Temática
+Coalesce and Repartition
+Pregunta 45
+Incorrecto
+We have an unmanaged table “my_table” 
+
+If we run the code block down below
+
+spark.sql(“DROP TABLE IF EXISTS my_table”) 
+
+What will happen to data in my_table ?
+
+Spark will remove the table and also associated views
+This is not a valid code block
+Tu respuesta es incorrecta
+The data will be dropped also
+Respuesta correcta
+No data will be removed but you will no longer be able to refer to this data by the table name.
+Explicación general
+If you are dropping an unmanaged table, no data will be removed but you will no longer be able to refer to this data by the table name.
+Temática
+Spark SQL
+Pregunta 46
+Incorrecto
+There is a temp view named ‘my_view’. If I want to query this view within spark, which command I should choose ?
+
+spark.read.view("my_view")
+
+Respuesta correcta
+spark.read.table("my_view")
+
+Tu respuesta es incorrecta
+spark.read.table("global_temp.my_view")
+
+spark.read.view("my_view")
+
+Explicación general
+Global temp views are accessed via prefix ‘global_temp’ And other tables are accessed without any prefixes.
+
+Temática
+Read and Write parquet/text/JSON file
+Pregunta 47
+Correcto
+What is the best description of a catalog ?
+
+Logically equivalent of DataFrames.
+
+Tu respuesta es correcta
+It’s the interface for managing a metadata catalog of relational entites such as databases, tables, functions etc.
+It is sparks core unit to parellize it’s workflow.
+
+A JVM process in order to help garbage collection.
+
+Explicación general
+The highest level abstraction in Spark SQL is the Catalog. The Catalog is an abstraction for the storage of metadata about the data stored in your tables as well as other helpful things like databases, tables, functions, and views
+Temática
+Spark SQL
+Pregunta 48
+Correcto
+If we want to store RDD as serialized Java objects in the JVM and if the RDD does not fit in memory, store the partitions that don’t fit on disk, and read them from there when they’re needed, which storage level we need to choose ?
+MEMORY_AND_DISK
+MEMORY_AND_DISK_2
+Tu respuesta es correcta
+MEMORY_AND_DISK_SER
+
+MEMORY_ONLY_2
+Explicación general
+https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.StorageLevel.html#pyspark.StorageLevel
+
+
+
+"Since the data is always serialized on the Python side, all the constants use the serialized formats."
+
+Temática
+Cache and Persist
+Pregunta 49
+Correcto
+When the property spark.sql.optimizer.dynamicPartitionPruning.enabled  is set to true, what optimization happens in spark ?
+
+Spark dynamically handles skew in sort-merge join by splitting (and replicating if needed) skewed partitions with this property enabled.
+It allows you to dynamically switch join strategies.
+It allows you to dynamically select physical plans based on cost.
+Tu respuesta es correcta
+You to read only as much data as you need.
+Explicación general
+DPP can auto-optimize your queries and make them more performant automatically. For more information; https://spark.apache.org/docs/latest/configuration.html#dynamic-allocation
+Temática
+Adaptive Query Execution
+Pregunta 50
+Correcto
+Which of the following operations can be used to create a new DataFrame with only the column “a” from the existing DataFrame df ?
+
+dataFrame.withColumnRenamed()
+
+Tu respuesta es correcta
+dataFrame.select(“a”)
+
+ddataFrame.head()
+
+dataFrame.withColumn()
+
+dataFrame.drop(“a”)
+
+Explicación general
+Correct answer here is select one column, we just select one column and get a new dataframe from it
+
+Temática
+Spark DataFrame API Applications
+Pregunta 51
+Correcto
+Which of the following code blocks merges two DataFrames df1 and df2 ?
+
+df1.add(df2)
+
+df1.addAll(df2)
+
+df1.merge(df2)
+
+Tu respuesta es correcta
+df1.union(df2)
+
+df1.append(df2)
+
+df1.appendAll(df2)
+
+Explicación general
+DataFrames are immutable. This means users cannot append to DataFrames because that would be changing it. To append to a DataFrame, you must union the original DataFrame along with the new DataFrame.
+Temática
+Spark DataFrame API Applications
+Pregunta 52
+Correcto
+Given the following dataframe df = spark.createDataFrame([("A", 20), ("B", 30), ("D", 80)],["Letter", "Number"])
+
+We want to store the sum of all “number”’s in a variable ‘result’. Choose the correct code block in order to achieve this goal.
+
+result = df.groupBy().sum().collect()
+
+result = df.groupBy().sum()
+
+Tu respuesta es correcta
+result = df.groupBy().sum().collect()[0][0]
+
+result = df.reduce().sum().collect()[0][0]
+
+Explicación general
+Here is the explication;
+1) df.groupBy().sum()
+
+This part is resulting type DataFrame[sum(Number): bigint]
+
+If we show the resulting dataframe it would be;
++-----------+
+
+|sum(Number)|
+
++-----------+
+
+| 130|
+
++-----------+
+
+2) df.groupBy().sum().collect()
+We do a collect on the previous summed dataframe; Remember collect returns a list of rows; (https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.DataFrame.collect.html#pyspark.sql.DataFrame.collect)
+
+Here is the resulting list of row.
+[Row(sum(Number)=130)]
+
+3) df.groupBy().sum().collect()[0]
+We have a list of rows, and we are only interested in the first row object which will give;
+Row(sum(Number)=130)
+
+
+4) df.groupBy().sum().collect()[0][0]
+We have our row, but we are interested getting the value of it. For our example it is '130'.
+
+The fields in rows can be accessed:
+
+a) like attributes (row.key)
+
+b) like dictionary values (row[key])
+
+In this example, we chose to access it as a dictionary value, hence the second [0]
+
+(https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.Row.html#pyspark.sql.Row)
+
+
+
+Or another way to do it is; import pyspark.sql.functions as F        df.agg(F.sum("Number")).collect()[0][0]
+
+Temática
+Spark DataFrame API Applications
+Pregunta 53
+Incorrecto
+What will cause a full shuffle knowing that dataframe ‘df’ has 2 partitions ?
+
+Tu respuesta es incorrecta
+All of them will cause a full shuffle.
+Respuesta correcta
+df.repartition(12)
+
+df.coalse(4)
+
+Explicación general
+Coalse function avoids a full shuffle if it's known that the number is decreasing then the executor can safely keep data on the minimum number of partitions, only moving the data off the extra nodes, onto the nodes that we kept. And it cannot be used to increase the number of partitions.
+
+Temática
+Coalesce and Repartition
+Pregunta 54
+Incorrecto
+Which of the following operation is classified as a narrow transformation ?
+
+orderBy()
+
+Respuesta correcta
+map()
+
+Tu respuesta es incorrecta
+collect()
+
+distinct()
+
+repartition()
+
+Explicación general
+see https://spark.apache.org/docs/latest/rdd-programming-guide.html#transformations
+Temática
+Transformation and Action
+Pregunta 55
+Incorrecto
+If spark is running in client mode, which of the following statement about is NOT correct ?
+
+Machines that who runs the driver called gateway machines or edge nodes.
+
+Tu respuesta es incorrecta
+In this mode worker nodes reside in the cluster.
+
+Spark driver remains on the client machine that submitted the application.
+Respuesta correcta
+The entire spark application is run on a single machine.
+Explicación general
+Client mode is nearly the same as cluster mode except that the Spark driver remains on the client machine that submitted the application.
+Temática
+Deployment Mode: Cluster/Client
+Pregunta 56
+Correcto
+What happens at a stage boundary in spark ?
+Tu respuesta es correcta
+At each stage boundary, data is written to disk by tasks in the parent stages and then fetched over the network by tasks in the child stage.
+Stage gets transformed to a job.
+
+Worker nodes restarts.
+
+Application stops immediately .
+
+Explicación general
+At each stage boundary, data is written to disk by tasks in the parent stages and then fetched over the network by tasks in the child stage. Because they incur heavy disk and network I/O, stage boundaries can be expensive and should be avoided when possible.
+Temática
+Conceptual understanding
+Pregunta 57
+Correcto
+Which of the following three operations are classified as a wide transformation ? Choose 2 answers:
+
+flatMap()
+
+filter()
+
+Tu selección es correcta
+distinct()
+
+coalesce(shuffle=true)
+
+Tu selección es correcta
+orderBy()
+
+drop()
+
+Explicación general
+see https://spark.apache.org/docs/latest/rdd-programming-guide.html#transformation
+
+Coalesce(shuffle=true) is not a valid option. You can pass number of partitions as a parameter, however it will not cause a shuffle. Check:
+
+https://spark.apache.org/docs/3.1.1/api/python/reference/api/pyspark.sql.DataFrame.coalesce.html
+
+Temática
+Transformation and Action
+Pregunta 58
+Correcto
+Consider following dataframe
+
+df = spark.createDataFrame([  ['John','NYC'],  ['Kevin','Chicago'],  ['Ram','Delhi'],  ['Sanjay','Sdyney'],  ['Ali','Istanbul'],  ['Zakaria','Paris'],  ['Alice','Chicago'],  ['Ann','Miami'],  ['Hajar','Casablanca'],  ['Cassandra','Marseille']],('name','city'))
+df = df.repartition(8)
+And we apply this code block df.rdd.getNumPartitions() What we will see ?
+
+It is not a valid command, we will have an error
+1
+Tu respuesta es correcta
+8
+4
+Explicación general
+If you don't specify number of partitions normally, spark tries to set the number of partitions automatically based on your cluster but here we specified that we want to have 8 partitions after we created the dataframe.
+
+Temática
+Coalesce and Repartition
+Pregunta 59
+Correcto
+For the following dataframe if we want to fully cache the dataframe immediately, what code block should replace (x) ?
+
+
+
+df = spark.createDataFrame([  ['John','NYC','test1@mailcom'],  ['Kevin','Chicago','test2@mail.com']],('name','city','email')) 
+ 
+df.cache()   
+ 
+(x)
+Tu selección es correcta
+df.count()
+df.takeAll()
+df.persist()
+df.take(1)
+df.cache()
+Explicación general
+When you use cache() or persist(), the DataFrame is not fully cached until you invoke an action that goes through every record (e.g., count()). If you use an action like take(1), only one partition will be cached because Catalyst realizes that you do not need to compute all the partitions just to retrieve one record.
+Temática
+Cache and Persist
+Pregunta 60
+Correcto
+Choose the equivalent code block to:
+
+df.filter(col("count") < 2)
+
+Where df is a valid dataframe which has a column named count
+
+df.getWhere("count < 2")
+
+df.select("count < 2")
+
+df.where(“count  is smaller then 2").show(2)
+
+Tu respuesta es correcta
+df.where("count < 2")
+
+df.where(count < 2)
+
+Temática
+Spark DataFrame API Applications
