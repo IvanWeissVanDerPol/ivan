@@ -35,8 +35,5 @@ out/
 logs
 *.log
 
-# Databricks cert files (if you want to ignore them)
-databricks cert/
-
 # Debug files
 nul
