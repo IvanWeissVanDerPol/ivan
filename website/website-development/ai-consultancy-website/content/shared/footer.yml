@@ -17,7 +17,7 @@ companyInfo:
     
     phone: "+595981324569"
     email: "info@aiparaguay.com"
-    whatsapp: "+595981324569"
+    messaging: "+595981324569"
     
   serviceArea: "🌐 Serving clients worldwide from Paraguay"
 
@@ -88,8 +88,8 @@ socialMedia:
       url: "https://youtube.com/@aiparaguay"
       icon: "YouTube"
       
-    - platform: "WhatsApp"
-      url: "https://wa.me/595981324569"
+    - platform: "Messaging"
+      url: "tel:+595981324569"
       icon: "MessageSquare"
 
 newsletter:

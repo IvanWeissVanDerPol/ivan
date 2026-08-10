@@ -395,7 +395,7 @@ export function DynamicHomepage({ content: initialContent }: DynamicHomepageProp
             {Array.isArray(contact.info) ? contact.info.map((info, index) => (
               <p key={index}>
                 {info.type === 'email' && '📧'} 
-                {info.type === 'whatsapp' && '📱'} 
+                {info.type === 'messaging' && '📱'} 
                 {info.type === 'address' && '📍'} 
                 {info.type === 'web' && '🌐'} 
                 {' '}{info.label}: {info.value}

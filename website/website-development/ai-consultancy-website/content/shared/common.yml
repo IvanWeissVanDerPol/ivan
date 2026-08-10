@@ -4,7 +4,7 @@
 contactInfo:
   phone: "+595981324569"
   email: "info@aiparaguay.com"
-  whatsapp: "+595981324569"
+  messaging: "+595981324569"
   address:
     street: "Av. Mariscal López 1234"
     neighborhood: "Villa Morra"
@@ -76,9 +76,9 @@ ctas:
       href: "/contacto"
       variant: "default"
     
-    whatsapp:
-      text: "Chat on WhatsApp"
-      href: "https://wa.me/595981324569"
+    messaging:
+      text: "Chat on Messaging"
+      href: "tel:+595981324569"
       variant: "default"
       
     services:

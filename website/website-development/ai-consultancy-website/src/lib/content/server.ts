@@ -109,7 +109,7 @@ function getFallbackPageContent(pageName: string): PageContent {
     contact: {
       title: 'Contacto',
       description: 'Ponte en contacto con nosotros',
-      primaryCta: { text: 'WhatsApp', variant: 'default' },
+      primaryCta: { text: 'Messaging', variant: 'default' },
       secondaryCta: { text: 'Email', variant: 'outline' },
       info: []
     },

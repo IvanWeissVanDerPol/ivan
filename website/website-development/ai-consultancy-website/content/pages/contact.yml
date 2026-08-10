@@ -10,7 +10,7 @@ $use:
 meta:
   title: "Contact - AI Paraguay Consultants"
   description: "Get in touch with AI Paraguay. Schedule your free consultation and discover how AI can transform your company."
-  keywords: ["contact AI Paraguay", "free consultation", "WhatsApp", "email", "Asunción Paraguay"]
+  keywords: ["contact AI Paraguay", "free consultation", "Messaging", "email", "Asunción Paraguay"]
   language: "en"
 
 hero:
@@ -23,12 +23,12 @@ contactOptions:
   description: "Choose the option that works best for you to start the conversation"
   options:
     - icon: "MessageSquare"
-      title: "WhatsApp"
+      title: "Messaging"
       description: "Immediate response via chat"
       value: "+595981324569"
       action:
         text: "Send message"
-        href: "https://wa.me/595981324569?text=Hello, I'm interested in learning more about AI services"
+        href: "tel:+595981324569?text=Hello, I'm interested in learning more about AI services"
         external: true
       primaryMethod: true
       
@@ -90,7 +90,7 @@ consultationForm:
       placeholder: "your.email@company.com"
       
     - name: "phone"
-      label: "Phone/WhatsApp"
+      label: "Phone/Messaging"
       type: "tel"
       required: true
       placeholder: "+595 xxx xxx xxx"

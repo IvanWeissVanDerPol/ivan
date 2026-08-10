@@ -150,7 +150,7 @@ export function SolutionsPage({ department }: SolutionsPageProps) {
               'Personalización de mensajes',
               'Optimización de timing'
             ],
-            tools: ['ChatGPT', 'Email Marketing Tools', 'CRM', 'WhatsApp Business'],
+            tools: ['ChatGPT', 'Email Marketing Tools', 'CRM', 'Messaging Business'],
             implementationTime: '2-3 semanas',
             price: 'Desde $3,500'
           }
@@ -336,7 +336,7 @@ export function SolutionsPage({ department }: SolutionsPageProps) {
               'Integración con base de conocimiento',
               'Aprendizaje continuo'
             ],
-            tools: ['ChatGPT', 'Claude', 'WhatsApp Business', 'Webchat', 'Telegram'],
+            tools: ['ChatGPT', 'Claude', 'Messaging Business', 'Webchat', 'Telegram'],
             implementationTime: '4-6 semanas',
             price: 'Desde $6,000'
           },
