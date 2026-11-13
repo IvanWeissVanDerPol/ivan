@@ -104,7 +104,7 @@ export interface Stats {
 
 // Contact types
 export interface ContactInfo {
-  type: 'email' | 'phone' | 'whatsapp' | 'address' | 'web'
+  type: 'email' | 'phone' | 'messaging' | 'address' | 'web'
   label: string
   value: string
   link?: string

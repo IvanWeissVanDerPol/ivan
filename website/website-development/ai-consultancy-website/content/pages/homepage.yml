@@ -76,7 +76,7 @@ contact:
   title: "Ready to transform your organization?"
   description: "Schedule a free consultation and discover how AI can revolutionize your company"
   primaryCta:
-    text: "Free Consultation via WhatsApp"
+    text: "Free Consultation via Messaging"
     variant: "default"
     size: "lg"
     icon: "MessageSquare"
